@@ -86,7 +86,7 @@ char *clean_username(const char *u_name)
     const char *pad = "user";
 
     if (cleaned == NULL) {
-        fprintf("Memory allocation failed for cleaned!");
+        fprintf(stderr, "Memory allocation failed for cleaned!");
         exit(1);
     }
 
