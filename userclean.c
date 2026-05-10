@@ -141,12 +141,12 @@ void process_username(const char *u_name)
         if (valid_username(cleaned))
             printf("%s : %s\n", u_name, cleaned); // returns transformed usernames 
         else
-            printf("invalid and unfixable\n"); // if not valid, prints out an error message 
+            printf("%s : invalid and unfixable\n", u_name); // if not valid, prints out an error message 
 
         free(cleaned); // frees memory 
     }
     else
-        printf("invalid and unfixable\n"); // if not valid, prints out an error message 
+        printf("%s : invalid and unfixable\n", u_name); // if not valid, prints out an error message 
 }
 
 
