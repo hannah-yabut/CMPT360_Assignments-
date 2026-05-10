@@ -29,3 +29,4 @@ The program works correctly throughout all the different test cases
 
 # 7. Notes / Assumptions (Optional)
 I have made the assumption that spaces in front and at the end of the input must be removed given that it was provided in the expected.txt where the input ( Admin 42 ) --> admin_42.
+lso to run the Valgrind command, the input file name must be "input.txt"
