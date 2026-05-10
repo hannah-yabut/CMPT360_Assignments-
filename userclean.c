@@ -82,12 +82,12 @@ return: cleaned u_name
 char *clean_username(const char *u_name)
 {
     int input_len = strlen(u_name);
-    char *cleaned = malloc(input_len + 5);
+    char *cleaned = malloc(input_len + 5); //Try to allocate memory with a size of the sum of the 2 strings (username + user + 1)
     const char *pad = "user";
 
     if (cleaned == NULL) {
         fprintf("Memory allocation failed for cleaned!");
-        return NULL; //Should yield an error message
+        exit(1);
     }
 
     int j = 0; // initialized indexing of cleaned username 
@@ -116,7 +116,6 @@ char *clean_username(const char *u_name)
         pad_k++;
         cleaned[j] = '\0';
     }
-
     return cleaned;
 }
 
@@ -163,8 +162,6 @@ void remove_nl(char *line)
         line[len -1] = '\0'; // replaces with null char, [len - 1] since last index is null char 
         len--; // decrement through the lines to avoid looping forever 
     }
-
-
 }
 
 /*
@@ -188,7 +185,11 @@ void remove_whitespaces_start_end(char* line, int length)
     line[j] = '\0';
 }
 
-
+/*
+    Purpose: Read from stdin continuously removing newlines, whitespaces, and valdifying the username.
+    Parameters: None
+    Return: None
+*/
 int main(void) 
 {
     char* line = NULL;
