@@ -41,11 +41,11 @@ int specific_chars(const char *u_name)
     // checks the entire username until the null char for the characters 
     while (u_name[i] != '\0') {
         if (!islower(u_name[i]) && !isdigit(u_name[i]) && u_name[i] != '_') {
-            return 0;
+            return 0; // return false if it fails 1 or more 
         }
         i++; // increments the indices 
     }
-    return 1; // returns false if it does not contain the criteria
+    return 1; // returns true if it meets all criteria 
 }
 
 /*
@@ -90,29 +90,29 @@ char *clean_username(const char *u_name)
         return NULL; //Should yield an error message
     }
 
-    int j = 0;
-    int pad_k = 0;
+    int j = 0; // initialized indexing of cleaned username 
+    int pad_k = 0; // initialized padding for usernames < 3 
 
+    // keeps cleaning the username as long as its less than 16 
     for (int i = 0; u_name[i] != '\0' && j < 16; i++) {
         unsigned char ch = (unsigned char)u_name[i];
 
         if (isupper(ch)) {
-            cleaned[j] = tolower(ch);
+            cleaned[j] = tolower(ch); // if username is capitalized -> lowercase 
             j++;
         } else if (isspace(ch)) {
-            cleaned[j] = '_';
+            cleaned[j] = '_'; // if there is a space it changes to an underscore 
             j++;
         } else if (islower(ch) || isdigit(ch) || ch == '_') {
-            cleaned[j] = ch;
+            cleaned[j] = ch; // the username does not need changing 
             j++;
         }
-        // invalid chars are skipped 
     }
-     cleaned[j] = '\0';
+     cleaned[j] = '\0'; 
 
     while (j < 3) {
-        cleaned[j] = pad[pad_k];
-        j++;
+        cleaned[j] = pad[pad_k]; // if username < 3 it pads the string "user" until the length is 3 
+        j++; 
         pad_k++;
         cleaned[j] = '\0';
     }
@@ -170,8 +170,8 @@ void remove_nl(char *line)
 /*
     Purpose: Remove leading and trailing spaces from the string. Spaces inside are preserved.
     Parameters:
-        char* line – the string to trim;
-        int length – its original length .
+        char* line the string to trim;
+        int length its original length .
     Return: None
 */
 void remove_whitespaces_start_end(char* line, int length)
@@ -188,25 +188,6 @@ void remove_whitespaces_start_end(char* line, int length)
     line[j] = '\0';
 }
 
-/*
-purpose: parses through command line input or file and removes newlines and calls function that processes
-usernames 
-params: None 
-return: 0
-*/
-/*
-
-int main(void) 
-{
-    char line[1024]; 
-    while (fgets(line, sizeof(line), stdin)!= NULL) {
-        remove_nl(line); 
-        remove_whitespaces_start_end(line);
-        process_username(line);
-    }
-    return 0; 
-}
-*/
 
 int main(void) 
 {
