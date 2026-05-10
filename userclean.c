@@ -1,10 +1,11 @@
+#define _GNU_SOURCE
 #include <string.h> 
 #include <stdio.h>
 #include <ctype.h> 
 #include <stdlib.h>
 /*
-Name: Hannah Yabut 
-Student ID: 3131432 
+Name: Hannah Yabut & Ismael Robleh
+Student ID: 3131432 & 3149556
 May 10, 2026 
 checks if a username is valid, if it can be transformed it transforms the username 
 */
@@ -55,7 +56,7 @@ return: True or False
 int certain_len(const char *u_name)
 {
     int len = strlen(u_name); 
-    return len >=3 && len <= 16; // checks that it is between 3-16 chars 
+    return len >= 3 && len <= 16; // checks that it is between 3-16 chars 
 }
 
 /*
@@ -85,7 +86,8 @@ char *clean_username(const char *u_name)
     const char *pad = "user";
 
     if (cleaned == NULL) {
-        return NULL;
+        fprintf("Memory allocation failed for cleaned!");
+        return NULL; //Should yield an error message
     }
 
     int j = 0;
@@ -130,16 +132,22 @@ void process_username(const char *u_name)
         printf("%s : %s\n", u_name, u_name); // prints valid string usernames
         return; 
     }
+
+    int username_length = strlen(u_name);
     
-    char *cleaned = clean_username(u_name); // calls function that cleans username and assigns cleaned as the cleaned username variable 
-    if (cleaned == NULL)
-        return; 
-    if (valid_username(cleaned))
-        printf("%s : %s\n", u_name, cleaned); // returns transformed usernames 
+    if (username_length > 0) {
+        char* cleaned = clean_username(u_name); // calls function that cleans username and assigns cleaned as the cleaned username variable 
+        if (cleaned == NULL)
+            return;
+        if (valid_username(cleaned))
+            printf("%s : %s\n", u_name, cleaned); // returns transformed usernames 
+        else
+            printf("invalid and unfixable\n"); // if not valid, prints out an error message 
+
+        free(cleaned); // frees memory 
+    }
     else
         printf("invalid and unfixable\n"); // if not valid, prints out an error message 
-
-    free(cleaned); // frees memory 
 }
 
 
@@ -151,10 +159,33 @@ return: None
 void remove_nl(char *line)
 {
     int len = strlen(line);
-    while (len > 0 && (line[len - 1] == '\n' || line[len -1] == ' ' || line[len -1] == '\t' )) {
+    while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == ' ' || line[len - 1] == '\t' )) {
         line[len -1] = '\0'; // replaces with null char, [len - 1] since last index is null char 
         len--; // decrement through the lines to avoid looping forever 
     }
+
+
+}
+
+/*
+    Purpose: Remove leading and trailing spaces from the string. Spaces inside are preserved.
+    Parameters:
+        char* line – the string to trim;
+        int length – its original length .
+    Return: None
+*/
+void remove_whitespaces_start_end(char* line, int length)
+{
+    //Iterates through the input and only keeps non whitespace characters or whitespace characters not located at the start or end of the string and discards the rest
+    int j = 0;
+    for (int i = 0; line[i] != '\0'; i++)
+    {
+        if (line[i] != ' ' || (line[i] == ' ' && i > 0 && i < length - 1))
+        {
+            line[j++] = line[i];
+        }
+    }
+    line[j] = '\0';
 }
 
 /*
@@ -163,12 +194,39 @@ usernames
 params: None 
 return: 0
 */
+/*
+
 int main(void) 
 {
     char line[1024]; 
     while (fgets(line, sizeof(line), stdin)!= NULL) {
         remove_nl(line); 
+        remove_whitespaces_start_end(line);
         process_username(line);
     }
     return 0; 
+}
+*/
+
+int main(void) 
+{
+    char* line = NULL;
+    size_t length = 0;
+    ssize_t num_read;
+
+    //Read from standard input until reached EOF
+    while ((num_read = getline(&line, &length, stdin)) != EOF)
+    {
+        remove_nl(line); //Remove unnecessary characters (newlines, tabs)
+        remove_whitespaces_start_end(line, length); //Remove white spaces from start and end of username
+        process_username(line); //validifying username
+    }
+
+    //Must free the memory at the end of the input stream
+    free(line);
+
+    //Avoid dangling pointers
+    line = NULL;
+
+    return 0;
 }
