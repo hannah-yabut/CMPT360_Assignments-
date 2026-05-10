@@ -87,7 +87,7 @@ char *clean_username(const char *u_name)
 
     if (cleaned == NULL) {
         fprintf(stderr, "Memory allocation failed for cleaned!");
-        exit(1);
+        return NULL;
     }
 
     int j = 0; // initialized indexing of cleaned username 
